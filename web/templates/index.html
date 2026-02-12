@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% set title = "Start" %}
+
+{% block content %}
+  <div class="card">
+    <div style="display:flex; align-items:baseline; justify-content:space-between; gap:12px;">
+      <h2 style="margin:0; font-size:16px; font-weight:900;">Planner Board</h2>
+      <span class="badge">Login</span>
+    </div>
+
+    <p class="subtle">
+      Redirect URI: <code>{{ redirect_uri }}</code>
+    </p>
+
+    {% if auth_error %}
+      <div class="card" style="margin-top:12px;">
+        <pre style="white-space:pre-wrap;">{{ auth_error }}{% if auth_error_description %}\n{{ auth_error_description }}{% endif %}</pre>
+        {% if token_result %}
+          <pre style="white-space:pre-wrap;">{{ token_result }}</pre>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+      <a class="pill" href="{{ url_for('web.login') }}">Login</a>
+      <a class="pill" href="{{ url_for('web.planner_board') }}">Board</a>
+      <a class="pill" href="{{ url_for('web.me') }}">Profil</a>
+    </div>
+  </div>
+{% endblock %}

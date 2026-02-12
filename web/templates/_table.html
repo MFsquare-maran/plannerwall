@@ -1,0 +1,44 @@
+{% if rows|length == 0 %}
+  <p class="subtle"><i>Keine offenen Einträge</i></p>
+{% else %}
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Bezeichnung</th>
+        <th>Titel</th>
+        <th>Kunde</th>
+        <th>Zugewiesen an</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for r in rows %}
+        <tr>
+          <td class="col-labels">
+            {% if r.labels and r.labels|length %}
+              {% for lab in r.labels %}
+                <span class="pill pill-label">{{ lab }}</span>
+              {% endfor %}
+            {% else %}
+              <span class="subtle">-</span>
+            {% endif %}
+          </td>
+
+          <td class="col-title">{{ r.title }}</td>
+
+          <td class="col-customer">
+            {{ r.customer if r.customer else "-" }}
+          </td>
+
+          <td class="col-assignees">
+            {% if r.assignees and r.assignees|length %}
+              {{ ", ".join(r.assignees) }}
+            {% else %}
+              <span class="subtle">-</span>
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endif %}

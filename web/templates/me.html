@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% set title = "Profil" %}
+
+{% block content %}
+  <div class="card">
+    <div style="display:flex; align-items:baseline; justify-content:space-between; gap:12px;">
+      <h2 style="margin:0; font-size:16px; font-weight:900;">Profil</h2>
+      <span class="badge">/me</span>
+    </div>
+
+    <div class="scroll-area" style="max-height:60vh;">
+      <pre style="white-space:pre-wrap; margin:0;">{{ me }}</pre>
+    </div>
+  </div>
+{% endblock %}

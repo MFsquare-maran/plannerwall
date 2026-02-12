@@ -1,0 +1,645 @@
+/* static/app.css
+   Komplettes Stylesheet (Basislayout + Topbar + Cards + Grid + Tabellen + Badges)
+   inkl. Status-Widget (Wetter/Wasser) im board.html OHNE blauen Balken
+
+   Ergänzung: "Tasks Banner" Styles (.tasks-*, .w-*)
+
+   Update: Wetter-Temperatur kann wie Zeit/Aare-Value dargestellt werden
+   (neu: .w-weather-label, .w-weather-temp, .w-weather-sub)
+
+   UPDATE (Layout):
+   - KW + Zeit nebeneinander
+   - Aare Temp und Bern (Weather) Temp nebeneinander (wie andere Kacheln)
+
+   UPDATE (neu):
+   - KW-Block: Datum + Wochentag über der Uhrzeit (rechts neben KW)
+
+   FIX:
+   - "Offene Tasks" links
+   - alle Kästen rechts aligned (Wrapper .tasks-right + margin-left:auto)
+*/
+
+:root{
+  --bg: #f6f8fb;
+  --card: #ffffff;
+  --text: #0f172a;
+  --muted: #364a66;
+
+  --border: rgba(15, 23, 42, .10);
+  --shadow: 0 10px 24px rgba(2, 6, 23, .08);
+
+  --radius: 30px;
+  --pad: 14px;
+
+  --topbar-h: 200px;
+
+  /* Logo / Brand */
+  --logo-h: 200px;
+  --logo-max-w: 500px;
+}
+
+/* ===== Reset / Base ===== */
+*{ box-sizing: border-box; }
+html, body{ height: 100%; }
+
+body{
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+  color: var(--text);
+  background: var(--bg);
+  overflow: hidden;
+}
+
+a{ color: inherit; }
+
+
+/* Vorhandene CSS-Stile ... */
+
+
+
+
+/* ===== Layout Container ===== */
+.container{
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px 18px;
+}
+
+main.container{
+  max-width: 100%;
+  width: 100%;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+/* ===== Topbar (Titel exakt mittig via Grid) ===== */
+.topbar{
+  height: var(--topbar-h);
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+  padding: 10px 18px;
+
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  column-gap: 16px;
+}
+
+.topbar__left{
+  grid-column: 1;
+  justify-self: start;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.topbar__center{
+  grid-column: 2;
+  justify-self: center;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.topbar__right{
+  grid-column: 3;
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.brand-logo{
+  height: var(--logo-h);
+  width: auto;
+  max-width: var(--logo-max-w);
+  object-fit: contain;
+  display: block;
+}
+
+.brand{
+  color: var(--muted);
+  text-decoration: none;
+  font-weight: 900;
+  letter-spacing: .2px;
+  line-height: 1;
+  font-size: 80px;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+/* Buttons in Topbar */
+.nav-btn{
+  color: var(--text);
+  background: rgba(2, 6, 23, .04);
+  border: 1px solid rgba(15, 23, 42, .12);
+  padding: 8px 10px;
+  border-radius: 999px;
+  font-size: 30px;
+  font-weight: 800;
+  text-decoration: none;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  user-select: none;
+}
+
+.nav-btn:hover{ background: rgba(2, 6, 23, .06); }
+.nav-btn:active{ transform: translateY(1px); }
+
+@media (max-width: 680px){
+  :root{ --logo-h: 34px; }
+  .brand{ font-size: 18px; }
+}
+
+/* ===== Cards / Panels ===== */
+.card{
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: var(--pad);
+}
+
+.stack > .card + .card{
+  margin-top: 30px;
+}
+
+/* ===== Grid (für die zwei Spalten im Board) ===== */
+.grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+
+  height: calc(100% - 88px);
+  margin-top: 30px;
+  overflow: hidden;
+}
+
+@media (max-width: 980px){
+  .grid{
+    grid-template-columns: 1fr;
+    height: auto;
+    overflow: visible;
+  }
+
+  main.container{
+    overflow: auto;
+    height: calc(100vh - var(--topbar-h));
+  }
+
+  body{ overflow: auto; }
+}
+
+/* ===== Scroll area (in Cards für Tabellen) ===== */
+.scroll-area{
+  overflow: auto;
+  max-height: calc(100vh - (var(--topbar-h) + 220px));
+  padding-right: 6px;
+}
+
+.scroll-area::-webkit-scrollbar{ width: 10px; height: 10px; }
+.scroll-area::-webkit-scrollbar-thumb{
+  background: rgba(15, 23, 42, .18);
+  border-radius: 999px;
+  border: 2px solid rgba(255,255,255,.7);
+}
+.scroll-area::-webkit-scrollbar-track{ background: transparent; }
+
+/* ===== Badge (z.B. Counts) ===== */
+.badge{
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  padding: 6px 10px;
+  border-radius: 999px;
+
+  border: 1px solid rgba(15, 23, 42, .12);
+  background: rgba(2, 6, 23, .04);
+
+  font-size: 50px;
+  font-weight: 900;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+/* Blaue Pill/Badge (für Bezeichnungen wie E55-653-PR) */
+.badge--blue{
+  background: #2563eb;
+  border-color: rgba(37, 99, 235, .35);
+  color: #ffffff;
+}
+
+.badge--blue:hover{ filter: brightness(.98); }
+
+/* ===== Tables (für _table.html) ===== */
+table{
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 40px;
+}
+
+thead th{
+  text-align: left;
+  font-size: 45px;
+  color: var(--muted);
+  font-weight: 900;
+  letter-spacing: .2px;
+  padding: 10px 10px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(255,255,255,.85);
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+tbody td{
+  padding: 10px 10px;
+  border-bottom: 2px solid rgba(15, 23, 42, .06);
+  vertical-align: top;
+}
+
+tbody tr:hover td{ background: rgba(2, 6, 23, .03); }
+
+td.small, th.small{ width: 1%; white-space: nowrap; }
+.muted{ color: var(--muted); font-weight: 700; }
+
+/* ===== Board Header (Offene Tasks + Status rechts) ===== */
+.board-header{
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.board-title{
+  margin: 0;
+  font-size: 50px;
+  font-weight: 900;
+}
+
+/* ===== Status (Wetter/Wasser) — neutral, KEIN blauer Balken ===== */
+.board-status{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 10px;
+
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,.85);
+  backdrop-filter: blur(6px);
+  border-radius: 999px;
+
+  max-width: min(900px, 100%);
+}
+
+.board-status__item{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.board-status__icon{
+  width: 18px;
+  height: 18px;
+  color: #0f172a;
+  flex: 0 0 auto;
+}
+
+.board-status__icon--water{ color: #075985; }
+
+.board-status__text{
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.board-status__text strong{ font-weight: 900; }
+
+.board-status__sep{
+  width: 1px;
+  height: 18px;
+  background: var(--border);
+}
+
+@media (max-width: 800px){
+  .board-status__text{ font-size: 12px; }
+}
+@media (max-width: 650px){
+  .board-status{ display: none; }
+}
+
+/* ===== Optional: neutrales "Pill"-Status Widget ===== */
+.status{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,.85);
+  backdrop-filter: blur(6px);
+  border-radius: 999px;
+  max-width: min(720px, 100%);
+}
+.status__item{ display:flex; align-items:center; gap:8px; min-width:0; }
+.status__icon{ width:18px; height:18px; color:#0f172a; flex:0 0 auto; }
+.status__icon--water{ color:#075985; }
+.status__text{ font-size:13px; font-weight:700; color:var(--text); white-space:nowrap; }
+.status__text strong{ font-weight:900; }
+.status__sep{ width:1px; height:18px; background:var(--border); }
+@media (max-width: 900px){ .status{ display:none; } }
+
+/* =========================================================
+   Ergänzung: blaue "Pills" für Bezeichnungen/Labels
+========================================================= */
+.pill{
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  padding: 6px 10px;
+  border-radius: 999px;
+
+  border: 1px solid rgba(15, 23, 42, .12);
+  background: rgba(2, 6, 23, .04);
+
+  font-size: 40px;
+  font-weight: 900;
+  color: var(--text);
+  white-space: nowrap;
+  min-width:280px
+}
+
+.pill-label{
+  background: rgba(0,130,180,.08);
+  border-color: rgba(0,130,180,.20);
+  color: #075985;
+  position: center;
+}
+
+td.col-labels .pill{ margin: 2px 6px 2px 0; }
+
+td.col-labels{
+  min-width: 180px;
+  max-width: 320px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+/* =========================================================
+   Tasks Banner Styles
+========================================================= */
+
+/* Card oben etwas "banneriger" */
+.tasks-card{ padding: 12px 14px; }
+
+/* Banner Layout */
+.tasks-bar{
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* wichtig: kein space-between */
+  gap: 12px;
+  min-width: 0;
+}
+
+.tasks-title{
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.tasks-h1{
+  font-size: 60px;
+  font-weight: 950;
+  letter-spacing: .2px;
+  margin: 0;
+  line-height: 1.15;
+}
+
+.tasks-sub{
+  font-size: 40px;
+  font-weight: 800;
+  color: var(--muted);
+  line-height: 1.2;
+}
+
+/* NEU: rechter Wrapper -> alles rechts aligned */
+.tasks-right{
+  margin-left: auto;         /* schiebt die ganze Gruppe nach rechts */
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+  flex-wrap: wrap;           /* darf umbrechen */
+  justify-content: flex-end; /* innerhalb rechtsbündig */
+  min-width: 0;
+}
+
+/* Right side pack (Status-Kacheln) */
+.tasks-info-right{
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  min-width: 0;
+}
+
+/* Common "pill block" look */
+.w-kwtime,
+.w-aare,
+.w-pack,
+.topline-departure{
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+
+  padding: 8px 10px;
+  border-radius: 30px;
+  border: 1px solid rgba(15, 23, 42, .12);
+  background: rgba(2, 6, 23, .03);
+  
+  
+}
+
+/* Typo helpers (Label/Wert) */
+.w-label,
+.w-weather-label{
+  font-size: 50px;
+  font-weight: 900;
+  color: var(--muted);
+  letter-spacing: .2px;
+}
+
+.w-value{
+  font-size: 55px;
+  font-weight: 950;
+}
+
+/* =========================================================
+   FINAL LAYOUT (nebeneinander)
+========================================================= */
+
+/* KW + Time nebeneinander */
+.w-kwtime{
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: flex-start;
+  gap: 10px;
+  min-width: 180px;
+}
+
+.w-kw{
+  font-size: 50px;
+  font-weight: 900;
+  color: var(--muted);
+  letter-spacing: .2px;
+  white-space: nowrap;
+}
+
+.w-datetime{
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  line-height: 1.05;
+}
+
+.w-date{
+  font-size: 50px;
+  font-weight: 850;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.w-time{
+  font-size: 50px;
+  font-weight: 950;
+  letter-spacing: .4px;
+  white-space: nowrap;
+  line-height: 1.05;
+}
+
+.w-aare{
+  flex-direction: row;
+  align-items: baseline;
+  gap: 10px;
+  min-width: 180px;
+}
+
+.w-aare .w-label,
+.w-aare .w-value{ white-space: nowrap; }
+
+/* Wetter (Bern) nebeneinander, Sub darunter */
+.w-pack{
+  flex-direction: row;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+  min-width: 220px;
+}
+
+.w-weather-label{ white-space: nowrap; }
+
+.w-weather-temp{
+  font-size: 55px;
+  font-weight: 950;
+  letter-spacing: .2px;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+.w-weather-sub{
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--muted);
+
+  flex: 0 0 100%;
+  margin-top: 2px;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 360px;
+}
+
+/* =========================================================
+   Departures grid inside the departures box
+========================================================= */
+
+/* Departures box should be vertical (header + list) */
+.topline-departure{
+  flex-direction: column;
+  align-items: stretch;
+  gap: 2px;
+  min-width: 300px;
+
+}
+
+.departures-list{
+  align-items: stretch;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.line-departure{
+  font-size: 35px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+/* Erhöhung auf 4 Spalten passend zum HTML */
+.departure-row {
+  display: grid;
+  grid-template-columns: 100px 150px 300px 200px; /* Icon | Linie | Ziel | Zeit */
+  gap: 2px;
+  align-items: center;
+  padding: 4px 0;
+}
+
+.departure-row.header {
+  font-size: 50px;
+  font-weight: 900;
+  color: var(--muted);
+  border-bottom: 5px solid rgba(15, 23, 42, 0.1);
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  
+}
+
+.col-time {
+  text-align: left;
+  font-variant-numeric: tabular-nums; /* Sorgt für gleichbleibende Ziffernbreite */
+  white-space: nowrap;
+}
+
+.col-dest {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.col-line {
+  font-weight: 800;
+}
+
+.line-logo {
+  align-items: top;
+  font-size: 50px;
+}
+
+/* Responsive */
+@media (max-width: 750px){
+  .tasks-info-right{ display: none; }
+  .tasks-h1{ font-size: 16px; }
+}

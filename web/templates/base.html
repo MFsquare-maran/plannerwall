@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ title if title else "Planner Board" }}</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}">
+
+    {% if config.BRAND_PAGE_BG_URL %}
+      <style>
+        body::before{
+          content:"";
+          position:fixed;
+          inset:0;
+          background-image:url('{{ config.BRAND_PAGE_BG_URL }}');
+          background-size:cover;
+          background-position:center;
+          filter: blur(10px);
+          transform: scale(1.08);
+          opacity: 1.0;
+          z-index:-2;
+        }
+        body::after{
+          content:"";
+          position:fixed;
+          inset:0;
+          background: radial-gradient(1200px 600px at 20% -10%, rgba(0,130,180,.18), transparent 60%),
+                      radial-gradient(900px 500px at 100% 0%, rgba(2,132,199,.10), transparent 55%);
+          z-index:-1;
+        }
+      </style>
+    {% endif %}
+  </head>
+
+  <body>
+    <header class="topbar">
+      <div class="topbar__left">
+        <!-- ggf. dein Logo / Schule -->
+        <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" class="brand-logo">
+      </div>
+
+      <div class="topbar__center">
+        <a class="brand" href="{{ url_for('web.planner_board') }}">Planner Board</a>
+      </div>
+
+      <div class="topbar__right">
+        <a class="nav-btn" href="{{ url_for('web.planner_board') }}">Board</a>
+        <a class="nav-btn" href="{{ url_for('web.logout') }}">Logout</a>
+      </div>
+    </header>
+
+    <main class="container">
+      {% block content %}{% endblock %}
+    </main>
+  </body>
+</html>
